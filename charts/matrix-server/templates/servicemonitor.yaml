@@ -1,0 +1,15 @@
+{{ if ne .Values.environment "ci" }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: matrix-server
+  labels:
+    group: w3f
+spec:
+  selector:
+    matchLabels:
+      app: matrix-server
+  endpoints:
+  - port: metrics
+    path: /_synapse/metrics
+{{ end }}

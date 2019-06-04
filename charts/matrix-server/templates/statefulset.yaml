@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: matrix-server
+  labels:
+    app: matrix-server
+spec:
+  selector:
+    matchLabels:
+      app: matrix-server
+  replicas: 1
+  revisionHistoryLimit: 3
+  serviceName: matrix-server
+  template:
+    metadata:
+      labels:
+        app: matrix-server
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap-synapse.yaml") . | sha256sum }}
+    spec:
+      containers:
+      - name: matrix-server
+        image: {{ .Values.image.repo }}:{{ .Values.image.tag }}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: SYNAPSE_CONFIG_PATH
+          value: /etc/matrix-server/homeserver.yaml
+        - name: UID
+          value: "0"
+        - name: GID
+          value: "0"
+        ports:
+        - name: http
+          containerPort: {{ .Values.port }}
+        - name: metrics
+          containerPort: 9000
+        livenessProbe:
+          httpGet:
+            path: /_matrix/client/versions
+            port: {{ .Values.port }}
+          initialDelaySeconds: 50
+          timeoutSeconds: 3
+          periodSeconds: 10
+        {{ if ne .Values.environment "ci" }}
+        resources:
+          limits:
+            cpu: 1200m
+            memory: 1Gi
+          requests:
+            cpu: 800m
+            memory: 512Mi
+        {{ end }}
+        volumeMounts:
+        - name: config
+          mountPath: /etc/matrix-server
+        {{ if ne .Values.environment "ci" }}
+        - name: data
+          mountPath: /data
+        {{ end }}
+      volumes:
+      - name: config
+        projected:
+          sources:
+          - configMap:
+              name: matrix-server-synapse
+          - configMap:
+              name: matrix-server-log
+          - secret:
+              name: matrix-server-signing-key
+{{ if ne .Values.environment "ci" }}
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi
+{{ end }}

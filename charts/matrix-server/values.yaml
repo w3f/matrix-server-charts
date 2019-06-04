@@ -1,0 +1,24 @@
+environment: production
+
+port: 8008
+
+domain: web3.foundation
+
+image:
+  repo: matrixdotorg/synapse
+  tag: v0.99.5.2
+
+db:
+  user: synapse_user
+  password: password
+  name: synapse
+  host: postgresql-postgresql
+
+recaptcha:
+  publicKey: recaptcha_public
+  privateKey: recaptcha_private
+
+macaroonSecretKey: macaroon_secret
+formSecret: form_secret
+
+signingKey: signing_key
