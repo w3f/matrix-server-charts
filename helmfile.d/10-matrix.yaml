@@ -1,0 +1,24 @@
+environments:
+  production:
+  ci:
+
+releases:
+- name: matrix-server
+  chart: ../charts/matrix-server
+  values:
+  - environment: {{ .Environment.Name }}
+  - db:
+      user: {{ env "DB_USER" | default "synapse_user" }}
+      password: '{{ env "DB_PASSWORD" | default "pass" }}'
+      name: {{ env "DB_NAME" | default "synapse" }}
+    recaptcha:
+      publicKey: {{ env "RECAPTCHA_PUBLIC_KEY" | default "recaptcha_public" }}
+      privateKey: {{ env "RECAPTCHA_PRIVATE_KEY" | default "recaptcha_private" }}
+    macaroonSecretKey: {{ env "MACAROON_SECRET_KEY" | default "macaroon_secret" }}
+    formSecret: {{ env "FORM_SECRET" | default "form_secret" }}
+    signingKey: {{ env "SIGNING_KEY" | default "signing_key" | quote }}
+
+- name: riot-web
+  chart: ../charts/riot-web
+  values:
+  - environment: {{ .Environment.Name }}

@@ -1,0 +1,10 @@
+environments:
+  production:
+  ci:
+
+releases:
+- name: postgresql
+  chart: stable/postgresql
+  version: 3.17.0
+  values:
+  - ./config/postgresql-values.yaml.gotmpl
