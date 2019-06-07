@@ -18,6 +18,15 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap-synapse.yaml") . | sha256sum }}
     spec:
+      initContainers:
+      - name: configmap-copy
+        image: busybox
+        command: ['/bin/sh', '-c', 'cp /etc/matrix-server/files/* /etc/matrix-server/']
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/matrix-server/files
+        - name: config
+          mountPath: /etc/matrix-server
       containers:
       - name: matrix-server
         image: {{ .Values.image.repo }}:{{ .Values.image.tag }}
@@ -51,6 +60,8 @@ spec:
             memory: 512Mi
         {{ end }}
         volumeMounts:
+        - name: config-volume
+          mountPath: /etc/matrix-server/files
         - name: config
           mountPath: /etc/matrix-server
         {{ if ne .Values.environment "ci" }}
@@ -59,6 +70,8 @@ spec:
         {{ end }}
       volumes:
       - name: config
+        emptyDir: {}
+      - name: config-volume
         projected:
           sources:
           - configMap:
