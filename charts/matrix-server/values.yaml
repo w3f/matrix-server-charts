@@ -22,3 +22,9 @@ macaroonSecretKey: macaroon_secret
 formSecret: form_secret
 
 signingKey: signing_key
+
+emailPattern: |-
+  .*@web3\.foundation
+
+autojoinRooms:
+- "#arrivals:web3.foundation"

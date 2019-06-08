@@ -54,14 +54,14 @@ data:
 
     allowed_local_3pids:
     - medium: email
-      pattern: '.*@web3\.foundation'
+      pattern: '{{ .Values.emailPattern }}'
     - medium: msisdn
       pattern: '.*'
 
     enable_metrics: true
 
     auto_join_rooms:
-    - "#arrivals:{{ .Values.domain }}"
+{{ toYaml .Values.autojoinRooms | indent 4 }}
 
     report_stats: false
 
