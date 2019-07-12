@@ -1,3 +1,4 @@
+{{ if .Values.antiscam }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -287,3 +288,4 @@ metadata:
 data:
   __init__.py: |
     from AntiScamSpamChecker import AntiScamSpamChecker
+{{ end }}

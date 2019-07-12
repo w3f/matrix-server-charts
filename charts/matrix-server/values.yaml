@@ -5,8 +5,8 @@ port: 8008
 domain: web3.foundation
 
 image:
-  repo: web3f/synapse
-  tag: v0.99.5.2-antiscam
+  repo: matrixdotorg/synapse
+  tag: v0.99.5.2
 
 db:
   user: synapse_user
@@ -29,4 +29,4 @@ emailPattern: |-
 autojoinRooms:
 - "#arrivals:web3.foundation"
 
-antiscam: true
+antiscam: false
