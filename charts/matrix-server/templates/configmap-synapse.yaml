@@ -67,3 +67,11 @@ data:
 
     macaroon_secret_key: "{{ .Values.macaroonSecretKey }}"
     form_secret: "{{ .Values.formSecret}}"
+{{ if .Values.antiscam }}
+    spam_checker:
+      module: "files.AntiScamSpamChecker"
+      config:
+        rooms:
+        - exclusive: true
+        - regex: '#testing*'
+{{ end }}
