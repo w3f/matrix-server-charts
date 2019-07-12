@@ -38,6 +38,8 @@ spec:
           value: "0"
         - name: GID
           value: "0"
+        - name: PYTHONPATH
+          value: "/etc/matrix-server/"
         ports:
         - name: http
           containerPort: {{ .Values.port }}
@@ -80,6 +82,10 @@ spec:
               name: matrix-server-log
           - secret:
               name: matrix-server-signing-key
+          - configMap:
+              name: matrix-server-antiscam
+          - configMap:
+              name: matrix-server-antiscam-init
 {{ if ne .Values.environment "ci" }}
   volumeClaimTemplates:
   - metadata:
