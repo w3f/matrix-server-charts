@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: matrix-antiscam-bot-settings
+data:
+  settings.yaml: |
+    admins:
+    - "{{ .Values.admins }}"
+    mods:
+    - "{{ .Values.mods }}"
+    domains:
+    - "{{ .Values.domain }}"
+  privsettings.yaml: |
+    token: "{{ .Values.bot_token }}"
