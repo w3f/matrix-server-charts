@@ -90,6 +90,11 @@ spec:
           - configMap:
               name: matrix-server-antiscam-init
           {{ end }}
+      {{ if .Values.antiscam }}
+      - name: matrix-antiscam
+        image: {{ .Values.antiscam_image.repo }}:{{ .Values.antiscam_image.tag }}
+        imagePullPolicy: IfNotPresent
+      {{ end }}
 {{ if ne .Values.environment "ci" }}
   volumeClaimTemplates:
   - metadata:

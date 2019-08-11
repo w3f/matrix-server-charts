@@ -8,6 +8,10 @@ image:
   repo: matrixdotorg/synapse
   tag: v1.2.1
 
+antiscam_image:
+   repo: web3f/matrix-antiscam
+   tag: latest
+
 db:
   user: synapse_user
   password: password
