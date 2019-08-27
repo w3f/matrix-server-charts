@@ -17,7 +17,6 @@ releases:
     macaroonSecretKey: {{ env "MACAROON_SECRET_KEY" | default "macaroon_secret" }}
     formSecret: {{ env "FORM_SECRET" | default "form_secret" }}
     signingKey: {{ env "SIGNING_KEY" | default "signing_key" | quote }}
-    antiscam: true
 
 - name: riot-web
   chart: ../charts/riot-web
