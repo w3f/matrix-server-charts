@@ -22,3 +22,14 @@ releases:
   chart: ../charts/riot-web
   values:
   - environment: {{ .Environment.Name }}
+
+{{ if env "ENABLE_ANTISCAM" }}
+- name: matrix-antiscam-bot
+  chart: ../charts/matrix-antiscam-bot
+  values:
+  - environment: {{ .Environment.Name }}
+  - bot_token: {{ env "BOT_TOKEN" | default "bot_token" }}
+  - admins: {{ env "BOT_ADMINS" | default "bot_admins" }}
+  - mods: {{ env "BOT_MODS" | default "bot_mods" }}
+  - domain: {{ env "BOT_DOMAIN" | default "bot_domain" }}
+{{ end }}

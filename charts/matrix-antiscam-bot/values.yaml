@@ -1,0 +1,7 @@
+environment: production
+
+port: 7000 
+
+image:
+  repo: web3f/matrix-antiscam
+  tag: latest 
