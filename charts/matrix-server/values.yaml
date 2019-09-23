@@ -34,3 +34,12 @@ autojoinRooms:
 - "#arrivals:web3.foundation"
 
 antiscam: false
+
+email:
+  enabled: false
+  smtp_host: "localhost"
+  smtp_port: 25
+  smtp_user: "user"
+  smtp_pass: "password"
+  notif_from: "Your Matrix Server"
+  riot_base_url: "http://localhost/riot"

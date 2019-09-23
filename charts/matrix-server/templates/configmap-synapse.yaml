@@ -75,3 +75,14 @@ data:
         - exclusive: true
         - regex: '#testing*'
 {{ end }}
+
+{{ if .Values.email.enabled }}
+    email:
+      enable_notifs: false
+      smtp_host: {{ .Values.email.smtp.host | quote }}
+      smtp_port: {{ .Values.email.smtp.port }}
+      smtp_user: {{ .Values.email.smtp.user | quote }}
+      smtp_pass: {{ .Values.email.smtp.password | quote }}
+      notif_from: {{ .Values.email.from | quote }}
+      riot_base_url: {{ .Values.email.riotBaseUrl | quote }}
+{{ end }}
