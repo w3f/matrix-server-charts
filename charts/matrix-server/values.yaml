@@ -6,11 +6,11 @@ domain: web3.foundation
 
 image:
   repo: matrixdotorg/synapse
-  tag: v1.2.1
+  tag: v1.7.0
 
 antiscam_image:
-   repo: web3f/matrix-antiscam
-   tag: latest
+  repo: web3f/matrix-antiscam
+  tag: latest
 
 db:
   user: synapse_user
