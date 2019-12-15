@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: matrix-server-log
 data:
-  web3.foundation.log.config: |
+  {{ .Values.domain }}.log.config: |
     version: 1
 
     formatters:
