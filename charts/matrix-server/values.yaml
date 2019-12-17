@@ -2,7 +2,7 @@ environment: production
 
 port: 8008
 
-domain: web3.foundation
+domain: domain.com
 
 image:
   repo: matrixdotorg/synapse
@@ -28,10 +28,10 @@ formSecret: form_secret
 signingKey: signing_key
 
 emailPattern: |-
-  .*@web3\.foundation
+  .*@domain\.com
 
 autojoinRooms:
-- "#arrivals:web3.foundation"
+- "#arrivals:domain.com"
 
 antiscam: false
 
