@@ -3,7 +3,8 @@ version: 2
 jobs:
   integrationTests:
     docker:
-      - image: web3f/ci-commons:v1.6.0
+      - image: web3f/ci-commons:v1.8.0
+    resource_class: large
     steps:
       - checkout
       - setup_remote_docker:
@@ -15,7 +16,7 @@ jobs:
 
   publishChart:
     docker:
-      - image: web3f/ci-commons:v1.6.0
+      - image: web3f/ci-commons:v1.8.0
     steps:
       - checkout
       - run:
