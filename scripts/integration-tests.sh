@@ -12,8 +12,8 @@ run_tests() {
 }
 
 teardown() {
-    helm delete --purge matrix-server
-    helm delete --purge riot-web
+    helm delete matrix-server
+    helm delete riot-web
 }
 
 main(){
