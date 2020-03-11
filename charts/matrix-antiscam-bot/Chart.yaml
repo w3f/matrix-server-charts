@@ -1,3 +1,4 @@
 description: Web3 Foundation Matrix Antiscam Bot
 name: matrix-antiscam-bot
 version: v1.1.0
+apiVersion: v2

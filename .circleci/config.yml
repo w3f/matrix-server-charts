@@ -13,6 +13,20 @@ jobs:
           description: run integration tests
           command: |
             /scripts/integration-tests.sh
+  helmLint:
+    docker:
+      - image: web3f/ci-commons:v2.0.1
+    steps:
+      - checkout
+      - run:
+          command: |
+            helm lint ./charts/matrix-antiscam-bot
+      - run:
+          command: |
+            helm lint ./charts/matrix-server
+      - run:
+          command: |
+            helm lint ./charts/riot-web
 
   publishChart:
     docker:
@@ -27,10 +41,16 @@ workflows:
   version: 2
   test_and_deploy:
     jobs:
+      - helmLint:
+          filters:
+            tags:
+              only: /.*/
       - integrationTests:
           filters:
             tags:
               only: /.*/
+          requires:
+            - helmLint
       - publishChart:
           filters:
             branches:
