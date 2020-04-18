@@ -10,10 +10,4 @@ spec:
     name: letsencrypt
   dnsNames:
   - matrix.{{ .Values.domain }}
-  acme:
-    config:
-    - dns01:
-        provider: prod-dns
-      domains:
-      - matrix.{{ .Values.domain }}
 {{ end }}
