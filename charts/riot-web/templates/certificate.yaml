@@ -10,10 +10,4 @@ spec:
     name: letsencrypt
   dnsNames:
   - riot.{{ .Values.domain }}
-  acme:
-    config:
-    - dns01:
-        provider: prod-dns
-      domains:
-      - riot.{{ .Values.domain }}
 {{ end }}
