@@ -235,7 +235,8 @@ master:
   affinity: {}
   tolerations: []
   podLabels: {}
-  podAnnotations: {}
+  podAnnotations:
+    backup.velero.io/backup-volumes: data
 
 ##
 ## PostgreSQL Slave parameters
@@ -249,7 +250,8 @@ slave:
   affinity: {}
   tolerations: []
   podLabels: {}
-  podAnnotations: {}
+  podAnnotations:
+    backup.velero.io/backup-volumes: data
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/

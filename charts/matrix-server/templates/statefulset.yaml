@@ -17,6 +17,7 @@ spec:
         app: matrix-server
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap-synapse.yaml") . | sha256sum }}
+        backup.velero.io/backup-volumes: config-volume, config, data
     spec:
       initContainers:
       - name: configmap-copy
