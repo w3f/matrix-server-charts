@@ -35,6 +35,8 @@ autojoinRooms:
 
 antiscam: false
 
+registrationSharedSecret: foobar
+
 email:
   enabled: false
   smtp_host: "localhost"
