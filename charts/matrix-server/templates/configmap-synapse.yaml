@@ -59,7 +59,7 @@ data:
       pattern: '.*'
 
     enable_metrics: true
-    registration_shared_secret: {{ .Values.registrationSharedSecret }}
+    registration_shared_secret: "{{ .Values.registrationSharedSecret }}"
 
     auto_join_rooms:
 {{ toYaml .Values.autojoinRooms | indent 4 }}
