@@ -45,3 +45,11 @@ email:
   smtp_pass: "password"
   notif_from: "Your Matrix Server"
   riot_base_url: "http://localhost/riot"
+
+resources:
+  limits:
+    cpu: 2000m
+    memory: 2Gi
+  requests:
+    cpu: 1000m
+    memory: 1Gi  
