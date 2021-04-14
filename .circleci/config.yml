@@ -52,6 +52,7 @@ workflows:
           requires:
             - helmLint
       - publishChart:
+          context: github-bot
           filters:
             branches:
               ignore: /.*/
