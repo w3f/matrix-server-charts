@@ -9,7 +9,7 @@ port: 8080
 
 image:
   repo: bubuntux/riot-web
-  tag: v1.7.25
+  tag: v1.7.32
 
 resources:
   limits:
