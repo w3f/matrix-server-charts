@@ -6,7 +6,7 @@ domain: domain.com
 
 image:
   repo: matrixdotorg/synapse
-  tag: v1.24.0
+  tag: v1.37.1
 
 antiscam_image:
   repo: web3f/matrix-antiscam
@@ -49,7 +49,7 @@ email:
 resources:
   limits:
     cpu: 2000m
-    memory: 2Gi
+    memory: 3Gi
   requests:
     cpu: 1000m
-    memory: 1Gi  
+    memory: 2Gi  
