@@ -9,12 +9,18 @@ port: 8080
 
 image:
   repo: bubuntux/riot-web
-  tag: v1.7.32
+  tag: v1.8.5
+
+replicaCount: 3  
+
+autoscaling:
+  enabled: false
+  minReplicas: 3
+  maxReplicas: 9
+  targetCPUUtilizationPercentage: 50
+  targetMemoryUtilizationPercentage: 50
 
 resources:
-  limits:
-    cpu: 300m
-    memory: 300Mi
   requests:
-    cpu: 100m
-    memory: 100Mi  
+    cpu: 5m
+    memory: 15Mi  

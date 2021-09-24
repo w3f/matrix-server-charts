@@ -5,7 +5,7 @@ metadata:
   labels:
     app: riot-web
 spec:
-  replicas: 2
+  replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: 3
   strategy:
     type: RollingUpdate
