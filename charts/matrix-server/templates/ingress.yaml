@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: matrix-server
+  name: {{ .Release.name }}
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/limit-rps: "10"
@@ -9,12 +9,12 @@ spec:
   tls:
   - hosts:
       - matrix.{{ .Values.domain }}
-    secretName: matrix-server-tls
+    secretName: {{ .Release.name }}-tls
   rules:
   - host: matrix.{{ .Values.domain }}
     http:
       paths:
       - path: /
         backend:
-          serviceName: matrix-server
+          serviceName: {{ .Release.name }}
           servicePort: {{ .Values.port }}

@@ -1,46 +1,46 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: matrix-server
+  name: {{ .Release.name }}
   labels:
-    app: matrix-server
+    app: {{ .Release.name }}
 spec:
   selector:
     matchLabels:
-      app: matrix-server
+      app: {{ .Release.name }}
   replicas: 1
   revisionHistoryLimit: 3
-  serviceName: matrix-server
+  serviceName: {{ .Release.name }}
   template:
     metadata:
       labels:
-        app: matrix-server
+        app: {{ .Release.name }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap-synapse.yaml") . | sha256sum }}
     spec:
       initContainers:
       - name: configmap-copy
         image: busybox
-        command: ['/bin/sh', '-c', 'cp /etc/matrix-server/files/* /etc/matrix-server/']
+        command: ['/bin/sh', '-c', 'cp /etc/{{ .Release.name }}/files/* /etc/{{ .Release.name }}/']
         volumeMounts:
         - name: config-volume
-          mountPath: /etc/matrix-server/files
+          mountPath: /etc/{{ .Release.name }}/files
         - name: config
-          mountPath: /etc/matrix-server
+          mountPath: /etc/{{ .Release.name }}
       containers:
-      - name: matrix-server
+      - name: {{ .Release.name }}
         image: {{ .Values.image.repo }}:{{ .Values.image.tag }}
         imagePullPolicy: IfNotPresent
         env:
         - name: SYNAPSE_CONFIG_PATH
-          value: /etc/matrix-server/homeserver.yaml
+          value: /etc/{{ .Release.name }}/homeserver.yaml
         - name: UID
           value: "0"
         - name: GID
           value: "0"
         {{ if .Values.antiscam }}
         - name: PYTHONPATH
-          value: "/etc/matrix-server/"
+          value: "/etc/{{ .Release.name }}/"
         {{ end }}
         ports:
         - name: http
@@ -60,9 +60,9 @@ spec:
         {{ end }}
         volumeMounts:
         - name: config-volume
-          mountPath: /etc/matrix-server/files
+          mountPath: /etc/{{ .Release.name }}/files
         - name: config
-          mountPath: /etc/matrix-server
+          mountPath: /etc/{{ .Release.name }}
         {{ if ne .Values.environment "ci" }}
         - name: data
           mountPath: /data
@@ -74,16 +74,16 @@ spec:
         projected:
           sources:
           - configMap:
-              name: matrix-server-synapse
+              name: {{ .Release.name }}-synapse
           - configMap:
-              name: matrix-server-log
+              name: {{ .Release.name }}-log
           - secret:
-              name: matrix-server-signing-key
+              name: {{ .Release.name }}-signing-key
           {{ if .Values.antiscam }}
           - configMap:
-              name: matrix-server-antiscam
+              name: {{ .Release.name }}-antiscam
           - configMap:
-              name: matrix-server-antiscam-init
+              name: {{ .Release.name }}-antiscam-init
           {{ end }}
 {{ if ne .Values.environment "ci" }}
   volumeClaimTemplates:
