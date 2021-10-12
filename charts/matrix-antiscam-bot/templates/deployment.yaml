@@ -42,7 +42,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: {{ .Release.name }}-settings
+            name: {{ .Release.Name }}-settings
             items:
               - key: privsettings.yaml
                 path: privsettings.yaml

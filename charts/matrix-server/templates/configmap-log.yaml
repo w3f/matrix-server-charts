@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.name }}-log
+  name: {{ .Release.Name }}-log
 data:
   {{ .Values.domain }}.log.config: |
     version: 1

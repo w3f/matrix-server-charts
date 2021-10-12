@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.name }}-synapse
+  name: {{ .Release.Name }}-synapse
 data:
   homeserver.yaml: |
     server_name: "{{ .Values.domain }}"
@@ -37,8 +37,8 @@ data:
         cp_min: 5
         cp_max: 10
 
-    log_config: "/etc/{{ .Release.name }}/{{ .Values.domain }}.log.config"
-    signing_key_path: "/etc/{{ .Release.name }}/{{ .Values.domain }}.signing.key"
+    log_config: "/etc/{{ .Release.Name }}/{{ .Values.domain }}.log.config"
+    signing_key_path: "/etc/{{ .Release.Name }}/{{ .Values.domain }}.signing.key"
 
     media_store_path: "/data/media_store"
     uploads_path: "/data/uploads"

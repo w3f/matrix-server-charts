@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ .Release.name }}
+  name: {{ .Release.Name }}
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/limit-rps: "10"
@@ -9,12 +9,12 @@ spec:
   tls:
   - hosts:
       - riot.{{ .Values.domain }}
-    secretName: {{ .Release.name }}-tls
+    secretName: {{ .Release.Name }}-tls
   rules:
   - host: riot.{{ .Values.domain }}
     http:
       paths:
       - path: /
         backend:
-          serviceName: {{ .Release.name }}
+          serviceName: {{ .Release.Name }}
           servicePort: {{ .Values.port }}

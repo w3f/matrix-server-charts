@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.name }}
+  name: {{ .Release.Name }}
   labels:
-    app: {{ .Release.name }}
+    app: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: 3
@@ -11,16 +11,16 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: {{ .Release.name }}
+      app: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ .Release.name }}
+        app: {{ .Release.Name }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
       containers:
-      - name: {{ .Release.name }}
+      - name: {{ .Release.Name }}
         image: {{ .Values.image.repo }}:{{ .Values.image.tag }}
         imagePullPolicy: IfNotPresent
         ports:
@@ -43,4 +43,4 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: {{ .Release.name }}
+          name: {{ .Release.Name }}

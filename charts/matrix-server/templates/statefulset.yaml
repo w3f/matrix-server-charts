@@ -1,46 +1,46 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ .Release.name }}
+  name: {{ .Release.Name }}
   labels:
-    app: {{ .Release.name }}
+    app: {{ .Release.Name }}
 spec:
   selector:
     matchLabels:
-      app: {{ .Release.name }}
+      app: {{ .Release.Name }}
   replicas: 1
   revisionHistoryLimit: 3
-  serviceName: {{ .Release.name }}
+  serviceName: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ .Release.name }}
+        app: {{ .Release.Name }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap-synapse.yaml") . | sha256sum }}
     spec:
       initContainers:
       - name: configmap-copy
         image: busybox
-        command: ['/bin/sh', '-c', 'cp /etc/{{ .Release.name }}/files/* /etc/{{ .Release.name }}/']
+        command: ['/bin/sh', '-c', 'cp /etc/{{ .Release.Name }}/files/* /etc/{{ .Release.Name }}/']
         volumeMounts:
         - name: config-volume
           mountPath: /etc/matrix-server/files
         - name: config
           mountPath: /etc/matrix-server
       containers:
-      - name: {{ .Release.name }}
+      - name: {{ .Release.Name }}
         image: {{ .Values.image.repo }}:{{ .Values.image.tag }}
         imagePullPolicy: IfNotPresent
         env:
         - name: SYNAPSE_CONFIG_PATH
-          value: /etc/{{ .Release.name }}/homeserver.yaml
+          value: /etc/{{ .Release.Name }}/homeserver.yaml
         - name: UID
           value: "0"
         - name: GID
           value: "0"
         {{ if .Values.antiscam }}
         - name: PYTHONPATH
-          value: "/etc/{{ .Release.name }}/"
+          value: "/etc/{{ .Release.Name }}/"
         {{ end }}
         ports:
         - name: http
@@ -74,16 +74,16 @@ spec:
         projected:
           sources:
           - configMap:
-              name: {{ .Release.name }}-synapse
+              name: {{ .Release.Name }}-synapse
           - configMap:
-              name: {{ .Release.name }}-log
+              name: {{ .Release.Name }}-log
           - secret:
-              name: {{ .Release.name }}-signing-key
+              name: {{ .Release.Name }}-signing-key
           {{ if .Values.antiscam }}
           - configMap:
-              name: {{ .Release.name }}-antiscam
+              name: {{ .Release.Name }}-antiscam
           - configMap:
-              name: {{ .Release.name }}-antiscam-init
+              name: {{ .Release.Name }}-antiscam-init
           {{ end }}
 {{ if ne .Values.environment "ci" }}
   volumeClaimTemplates:
