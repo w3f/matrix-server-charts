@@ -60,9 +60,9 @@ spec:
         {{ end }}
         volumeMounts:
         - name: config-volume
-          mountPath: /etc/{{ .Release.name }}/files
+          mountPath: /etc/matrix-server/files
         - name: config
-          mountPath: /etc/{{ .Release.name }}
+          mountPath: /etc/matrix-server
         {{ if ne .Values.environment "ci" }}
         - name: data
           mountPath: /data
