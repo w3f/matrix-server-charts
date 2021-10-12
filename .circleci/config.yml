@@ -26,7 +26,7 @@ jobs:
             helm lint ./charts/matrix-server
       - run:
           command: |
-            helm lint ./charts/riot-web
+            helm lint ./charts/element-web
 
   publishChart:
     docker:
