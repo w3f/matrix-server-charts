@@ -2,13 +2,13 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: matrix-server
+  name: {{ .Release.Name }}
   labels:
     group: w3f
 spec:
   selector:
     matchLabels:
-      app: matrix-server
+      app: {{ .Release.Name }}
   endpoints:
   - port: metrics
     path: /_synapse/metrics

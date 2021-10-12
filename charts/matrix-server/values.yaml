@@ -6,7 +6,7 @@ domain: domain.com
 
 image:
   repo: matrixdotorg/synapse
-  tag: v1.37.1
+  tag: v1.38.1
 
 antiscam_image:
   repo: web3f/matrix-antiscam
@@ -44,7 +44,7 @@ email:
   smtp_user: "user"
   smtp_pass: "password"
   notif_from: "Your Matrix Server"
-  riot_base_url: "http://localhost/riot"
+  client_base_url: "http://localhost/riot"
 
 resources:
   limits:

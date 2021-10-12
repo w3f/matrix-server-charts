@@ -18,8 +18,8 @@ releases:
     formSecret: {{ env "FORM_SECRET" | default "form_secret" }}
     signingKey: {{ env "SIGNING_KEY" | default "signing_key" | quote }}
 
-- name: riot-web
-  chart: ../charts/riot-web
+- name: element-web
+  chart: ../charts/element-web
   values:
   - environment: {{ .Environment.Name }}
 

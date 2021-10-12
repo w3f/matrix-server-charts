@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: matrix-server
+  name: {{ .Release.Name }}
   labels:
-    app: matrix-server
+    app: {{ .Release.Name }}
 spec:
   ports:
   - name: http
@@ -11,4 +11,4 @@ spec:
   - name: metrics
     port: 9000
   selector:
-    app: matrix-server
+    app: {{ .Release.Name }}

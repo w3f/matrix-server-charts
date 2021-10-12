@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: matrix-server
+  name: {{ .Release.Name }}
   labels:
-    app: matrix-server
+    app: {{ .Release.Name }}
 spec:
   selector:
     matchLabels:
-      app: matrix-server
+      app: {{ .Release.Name }}
   replicas: 1
   revisionHistoryLimit: 3
-  serviceName: matrix-server
+  serviceName: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: matrix-server
+        app: {{ .Release.Name }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap-synapse.yaml") . | sha256sum }}
     spec:
@@ -28,7 +28,7 @@ spec:
         - name: config
           mountPath: /etc/matrix-server
       containers:
-      - name: matrix-server
+      - name: {{ .Release.Name }}
         image: {{ .Values.image.repo }}:{{ .Values.image.tag }}
         imagePullPolicy: IfNotPresent
         env:
@@ -74,16 +74,16 @@ spec:
         projected:
           sources:
           - configMap:
-              name: matrix-server-synapse
+              name: {{ .Release.Name }}-synapse
           - configMap:
-              name: matrix-server-log
+              name: {{ .Release.Name }}-log
           - secret:
-              name: matrix-server-signing-key
+              name: {{ .Release.Name }}-signing-key
           {{ if .Values.antiscam }}
           - configMap:
-              name: matrix-server-antiscam
+              name: {{ .Release.Name }}-antiscam
           - configMap:
-              name: matrix-server-antiscam-init
+              name: {{ .Release.Name }}-antiscam-init
           {{ end }}
 {{ if ne .Values.environment "ci" }}
   volumeClaimTemplates:
