@@ -3,7 +3,6 @@ apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
   name: {{ .Release.name }}
-  namespace: default
 spec:
   secretName: {{ .Release.name }}-tls
   issuerRef:
