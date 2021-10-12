@@ -24,9 +24,9 @@ spec:
         command: ['/bin/sh', '-c', 'cp /etc/{{ .Release.name }}/files/* /etc/{{ .Release.name }}/']
         volumeMounts:
         - name: config-volume
-          mountPath: /etc/{{ .Release.name }}/files
+          mountPath: /etc/matrix-server/files
         - name: config
-          mountPath: /etc/{{ .Release.name }}
+          mountPath: /etc/matrix-server
       containers:
       - name: {{ .Release.name }}
         image: {{ .Values.image.repo }}:{{ .Values.image.tag }}
