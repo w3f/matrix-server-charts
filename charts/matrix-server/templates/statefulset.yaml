@@ -21,7 +21,7 @@ spec:
       initContainers:
       - name: configmap-copy
         image: busybox
-        command: ['/bin/sh', '-c', 'cp /etc/{{ .Release.Name }}/files/* /etc/{{ .Release.Name }}/']
+        command: ['/bin/sh', '-c', 'cp /etc/matrix-server/files/* /etc/matrix-server/']
         volumeMounts:
         - name: config-volume
           mountPath: /etc/matrix-server/files
@@ -33,14 +33,14 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
         - name: SYNAPSE_CONFIG_PATH
-          value: /etc/{{ .Release.Name }}/homeserver.yaml
+          value: /etc/matrix-server/homeserver.yaml
         - name: UID
           value: "0"
         - name: GID
           value: "0"
         {{ if .Values.antiscam }}
         - name: PYTHONPATH
-          value: "/etc/{{ .Release.Name }}/"
+          value: "/etc/matrix-server/"
         {{ end }}
         ports:
         - name: http
