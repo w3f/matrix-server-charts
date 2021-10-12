@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: matrix-antiscam-bot-settings
+  name: {{ .Release.name }}-settings
 data:
   settings.yaml: |
     admins:
