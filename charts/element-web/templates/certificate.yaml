@@ -2,9 +2,9 @@
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
-  name: element-web
+  name: {{ .Release.name }}
 spec:
-  secretName: element-web-tls
+  secretName: {{ .Release.name }}-tls
   issuerRef:
     name: letsencrypt
   dnsNames:

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: element-web
+  name: {{ .Release.name }}
 data:
   config.json: |
     {
