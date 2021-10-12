@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: riot-web
+  name: element-web
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/limit-rps: "10"
@@ -9,12 +9,12 @@ spec:
   tls:
   - hosts:
       - riot.{{ .Values.domain }}
-    secretName: riot-web-tls
+    secretName: element-web-tls
   rules:
   - host: riot.{{ .Values.domain }}
     http:
       paths:
       - path: /
         backend:
-          serviceName: riot-web
+          serviceName: element-web
           servicePort: {{ .Values.port }}

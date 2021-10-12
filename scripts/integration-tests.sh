@@ -8,7 +8,7 @@ run_tests() {
     echo Running tests...
 
     wait_pod_ready matrix-server
-    wait_pod_ready riot-web
+    wait_pod_ready element-web
 }
 
 teardown() {

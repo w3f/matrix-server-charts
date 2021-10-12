@@ -2,9 +2,9 @@
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
-  name: riot-web
+  name: element-web
 spec:
-  secretName: riot-web-tls
+  secretName: element-web-tls
   issuerRef:
     name: letsencrypt
   dnsNames:

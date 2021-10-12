@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: riot-web
+  name: element-web
   labels:
-    app: riot-web
+    app: element-web
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: 3
@@ -11,16 +11,16 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: riot-web
+      app: element-web
   template:
     metadata:
       labels:
-        app: riot-web
+        app: element-web
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
       containers:
-      - name: riot-web
+      - name: element-web
         image: {{ .Values.image.repo }}:{{ .Values.image.tag }}
         imagePullPolicy: IfNotPresent
         ports:
@@ -38,9 +38,9 @@ spec:
         {{ end }}
         volumeMounts:
         - name: config
-          mountPath: /etc/riot-web/config.json
+          mountPath: /etc/element-web/config.json
           subPath: config.json
       volumes:
       - name: config
         configMap:
-          name: riot-web
+          name: element-web
