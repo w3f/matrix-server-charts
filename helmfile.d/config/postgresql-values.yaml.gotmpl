@@ -14,12 +14,12 @@ global:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 10.7.0
+  tag: 11.13.0-debian-10-r58
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -40,8 +40,8 @@ volumePermissions:
   enabled: true
   image:
     registry: docker.io
-    repository: bitnami/minideb
-    tag: latest
+    repository: bitnami/bitnami-shell
+    tag: 10-debian-10-r218
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -62,15 +62,38 @@ volumePermissions:
 ##
 securityContext:
   enabled: true
-  fsGroup: 1001
   runAsUser: 1001
-
+## Pod Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.enabled Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)
+  ##
+  enabled: false
+  ## @param serviceAccount.name Name of an already existing service account. Setting this value disables the automatic service account creation
+  ##
+  name: ""
+  ## @param serviceAccount.autoMount Auto-mount the service account token in the pod
+  ##
+  autoMount: false
+## Pod Security Policy
+## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+## @param psp.create Create Pod Security Policy
+##
+psp:
+  create: false
+## Creates role for ServiceAccount
+## Required for PSP
+## @param rbac.create Create Role and RoleBinding (required for PSP to work)
+##
+rbac:
+  create: false
 {{ if ne .Environment.Name "ci" }}
 replication:
   enabled: true
   user: repl_user
   password: repl_password
-  slaveReplicas: 2
+  readReplicas: 2
   ## Set synchronous commit mode: on, off, remote_apply, remote_write and local
   ## ref: https://www.postgresql.org/docs/9.6/runtime-config-wal.html#GUC-WAL-LEVEL
   synchronousCommit: "on"
@@ -98,12 +121,12 @@ postgresqlDatabase: '{{ env "DB_NAME" | default "synapse" }}'
 ## PostgreSQL data dir
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md
 ##
-postgresqlDataDir: /bitnami/postgresql
+postgresqlDataDir: /bitnami/postgresql/data
 
 ## Specify extra initdb args
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md
 ##
-# postgresqlInitdbArgs:
+postgresqlInitdbArgs: --lc-collate C --lc-ctype C --encoding UTF8
 
 ## Specify a custom location for the PostgreSQL transaction log
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md
@@ -211,7 +234,7 @@ persistence:
   # storageClass: "-"
   accessModes:
     - ReadWriteOnce
-  size: 20Gi
+  size: 200Gi
   annotations: {}
 {{ else }}
 persistence:
@@ -224,32 +247,209 @@ updateStrategy:
   type: RollingUpdate
 
 ##
-## PostgreSQL Master parameters
+## PostgreSQL Primary parameters
 ##
-master:
-  ## Node, affinity and tolerations labels for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+primary:
+  ## @param primary.podAffinityPreset PostgreSQL primary pod affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param primary.podAntiAffinityPreset PostgreSQL primary pod anti-affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## PostgreSQL Primary node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param primary.nodeAffinityPreset.type PostgreSQL primary node affinity preset type. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`
+    type: ""
+    ## @param primary.nodeAffinityPreset.key PostgreSQL primary node label key to match Ignored if `primary.affinity` is set.
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## @param primary.nodeAffinityPreset.values PostgreSQL primary node label values to match. Ignored if `primary.affinity` is set.
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param primary.affinity Affinity for PostgreSQL primary pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
-  nodeSelector: {}
+  ## Note: primary.podAffinityPreset, primary.podAntiAffinityPreset, and primary.nodeAffinityPreset will be ignored when it's set
+  ##
   affinity: {}
+  ## @param primary.nodeSelector Node labels for PostgreSQL primary pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param primary.tolerations Tolerations for PostgreSQL primary pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
   tolerations: []
+  ## @param primary.extraPodSpec Optionally specify extra PodSpec
+  ##
+  extraPodSpec: {}
+  ## @param primary.labels Map of labels to add to the statefulset (postgresql primary)
+  ##
+  labels: {}
+  ## @param primary.annotations Annotations for PostgreSQL primary pods
+  ##
+  annotations: {}
+  ## @param primary.podLabels Map of labels to add to the pods (postgresql primary)
+  ##
   podLabels: {}
+  ## @param primary.podAnnotations Map of annotations to add to the pods (postgresql primary)
+  ##
   podAnnotations: {}
-
+  ## @param primary.priorityClassName Priority Class to use for each pod (postgresql primary)
+  ##
+  priorityClassName: ""
+  ## @param primary.extraInitContainers Extra init containers to add to the pods (postgresql primary)
+  ## Example
+  ##
+  ## extraInitContainers:
+  ##   - name: do-something
+  ##     image: busybox
+  ##     command: ['do', 'something']
+  ##
+  extraInitContainers: []
+  ## @param primary.extraVolumeMounts Extra volume mounts to add to the pods (postgresql primary)
+  ##
+  extraVolumeMounts: []
+  ## @param primary.extraVolumes Extra volumes to add to the pods (postgresql primary)
+  ##
+  extraVolumes: []
+  ## @param primary.sidecars Extra containers to the pod
+  ## For example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## Override the service configuration for primary
+  ## @param primary.service.type Allows using a different service type for primary
+  ## @param primary.service.nodePort Allows using a different nodePort for primary
+  ## @param primary.service.clusterIP Allows using a different clusterIP for primary
+  ##
+  service:
+    type: ""
+    nodePort: ""
+    clusterIP: ""
+## PostgreSQL read only replica parameters
 ##
-## PostgreSQL Slave parameters
-##
-slave:
-  ## Node, affinity and tolerations labels for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+readReplicas:
+  ## @param readReplicas.podAffinityPreset PostgreSQL read only pod affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param readReplicas.podAntiAffinityPreset PostgreSQL read only pod anti-affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## PostgreSQL read only node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param readReplicas.nodeAffinityPreset.type PostgreSQL read only node affinity preset type. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param readReplicas.nodeAffinityPreset.key PostgreSQL read only node label key to match Ignored if `primary.affinity` is set.
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## @param readReplicas.nodeAffinityPreset.values PostgreSQL read only node label values to match. Ignored if `primary.affinity` is set.
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param readReplicas.affinity Affinity for PostgreSQL read only pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
-  nodeSelector: {}
+  ## Note: readReplicas.podAffinityPreset, readReplicas.podAntiAffinityPreset, and readReplicas.nodeAffinityPreset will be ignored when it's set
+  ##
   affinity: {}
+  ## @param readReplicas.nodeSelector Node labels for PostgreSQL read only pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param readReplicas.tolerations Tolerations for PostgreSQL read only pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
   tolerations: []
+  ## @param readReplicas.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param readReplicas.extraPodSpec Optionally specify extra PodSpec
+  ##
+  extraPodSpec: {}
+  ## @param readReplicas.labels Map of labels to add to the statefulsets (postgresql readReplicas)
+  ##
+  labels: {}
+  ## @param readReplicas.annotations Annotations for PostgreSQL read only pods
+  ##
+  annotations: {}
+  ## @param readReplicas.podLabels Map of labels to add to the pods (postgresql readReplicas)
+  ##
   podLabels: {}
+  ## @param readReplicas.podAnnotations Map of annotations to add to the pods (postgresql readReplicas)
+  ##
   podAnnotations: {}
+  ## @param readReplicas.priorityClassName Priority Class to use for each pod (postgresql readReplicas)
+  ##
+  priorityClassName: ""
+  ## @param readReplicas.extraInitContainers Extra init containers to add to the pods (postgresql readReplicas)
+  ## Example
+  ##
+  ## extraInitContainers:
+  ##   - name: do-something
+  ##     image: busybox
+  ##     command: ['do', 'something']
+  ##
+  extraInitContainers: []
+  ## @param readReplicas.extraVolumeMounts Extra volume mounts to add to the pods (postgresql readReplicas)
+  ##
+  extraVolumeMounts: []
+  ## @param readReplicas.extraVolumes Extra volumes to add to the pods (postgresql readReplicas)
+  ##
+  extraVolumes: []
+  ## @param readReplicas.sidecars Extra containers to the pod
+  ##
+  ## For example:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## Override the service configuration for read
+  ## @param readReplicas.service.type Allows using a different service type for readReplicas
+  ## @param readReplicas.service.nodePort Allows using a different nodePort for readReplicas
+  ## @param readReplicas.service.clusterIP Allows using a different clusterIP for readReplicas
+  ##
+  service:
+    type: ""
+    nodePort: ""
+    clusterIP: ""
+  ## @param readReplicas.persistence.enabled Whether to enable PostgreSQL read replicas replicas persistence
+  ##
+  persistence:
+    enabled: true
+  ## @param readReplicas.resources CPU/Memory resource requests/limits override for readReplicass. Will fallback to `values.resources` if not defined.
+  ##
+  resources: {}
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -305,8 +505,8 @@ metrics:
     loadBalancerIP:
   image:
     registry: docker.io
-    repository: wrouesnel/postgres_exporter
-    tag: v0.4.7
+    repository: bitnami/postgres-exporter
+    tag: 0.10.0-debian-10-r85
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
