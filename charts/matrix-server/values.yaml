@@ -6,7 +6,7 @@ domain: domain.com
 
 image:
   repo: matrixdotorg/synapse
-  tag: v1.38.1
+  tag: v1.44.0
 
 antiscam_image:
   repo: web3f/matrix-antiscam
@@ -16,7 +16,7 @@ db:
   user: synapse_user
   password: password
   name: synapse
-  host: postgresql-postgresql
+  host: postgresql
 
 recaptcha:
   publicKey: recaptcha_public
