@@ -6,7 +6,6 @@ domain: domain.com
 
 image:
   repo: matrixdotorg/synapse
-  tag: v1.44.0
 
 antiscam_image:
   repo: web3f/matrix-antiscam

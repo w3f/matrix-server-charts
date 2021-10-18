@@ -1,5 +1,5 @@
 description: Web3 Foundation Matrix Homeserver
 name: matrix-server
 version: v1.5.7
-appVersion: {{ .Values.image.tag }}
+appVersion: v1.44.0
 apiVersion: v2

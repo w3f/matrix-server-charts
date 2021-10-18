@@ -1,5 +1,5 @@
 description: Web3 Foundation Element app
 name: element-web
 version: v1.5.7
-appVersion: {{ .Values.image.tag }}
+appVersion: v1.9.0
 apiVersion: v2
