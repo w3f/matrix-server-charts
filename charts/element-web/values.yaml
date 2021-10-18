@@ -9,7 +9,6 @@ port: 8080
 
 image:
   repo: bubuntux/element-web
-  tag: v1.9.0
 
 replicaCount: 3  
 
