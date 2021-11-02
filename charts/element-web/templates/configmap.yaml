@@ -29,7 +29,7 @@ data:
         "https://scalar-staging.riot.im/scalar/api"
       ],
       "bug_report_endpoint_url": "https://element.io/bugreports/submit",
-      "defaultCountryCode": "GB",
+      "defaultCountryCode": "CH",
       "showLabsSettings": false,
       "features": { },
       "default_federate": true,
