@@ -10,7 +10,8 @@ data:
 
     public_baseurl: https://matrix.{{ .Values.domain }}/
 
-    use_presence: false
+    presence:
+      enabled: false
 
     listeners:
     - port: {{ .Values.port }}
@@ -41,7 +42,6 @@ data:
     signing_key_path: "/etc/matrix-server/{{ .Values.domain }}.signing.key"
 
     media_store_path: "/data/media_store"
-    uploads_path: "/data/uploads"
 
     enable_registration_captcha: true
     recaptcha_public_key: "{{ .Values.recaptcha.publicKey }}"
@@ -68,14 +68,6 @@ data:
 
     macaroon_secret_key: "{{ .Values.macaroonSecretKey }}"
     form_secret: "{{ .Values.formSecret}}"
-{{ if .Values.antiscam }}
-    spam_checker:
-      module: "files.AntiScamSpamChecker"
-      config:
-        rooms:
-        - exclusive: true
-        - regex: '#testing*'
-{{ end }}
 
 {{ if .Values.email.enabled }}
     email:
