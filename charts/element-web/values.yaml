@@ -8,7 +8,7 @@ brand: "Web3 Foundation"
 port: 8080
 
 image:
-  repo: bubuntux/element-web
+  repo: vectorim/element-web
 
 replicaCount: 3  
 
