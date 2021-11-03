@@ -32,8 +32,6 @@ emailPattern: |-
 autojoinRooms:
 - "#arrivals:domain.com"
 
-antiscam: false
-
 registrationSharedSecret: foobar
 
 email:

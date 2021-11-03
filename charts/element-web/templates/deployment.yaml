@@ -38,8 +38,7 @@ spec:
         {{ end }}
         volumeMounts:
         - name: config
-          mountPath: /etc/element-web/config.json
-          subPath: config.json
+          mountPath: /app/config.json
       volumes:
       - name: config
         configMap:
