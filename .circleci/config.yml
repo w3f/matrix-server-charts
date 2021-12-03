@@ -3,7 +3,7 @@ version: 2
 jobs:
   integrationTests:
     docker:
-      - image: web3f/ci-commons:v2.4.8
+      - image: web3f/ci-commons:v2.4.11
     resource_class: large
     steps:
       - checkout
@@ -15,7 +15,7 @@ jobs:
             /scripts/integration-tests.sh
   helmLint:
     docker:
-      - image: web3f/ci-commons:v2.4.8
+      - image: web3f/ci-commons:v2.4.11
     steps:
       - checkout
       - run:
@@ -27,7 +27,7 @@ jobs:
 
   publishChart:
     docker:
-      - image: web3f/ci-commons:v2.4.8
+      - image: web3f/ci-commons:v2.4.11
     steps:
       - checkout
       - run:
