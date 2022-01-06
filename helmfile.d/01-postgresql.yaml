@@ -7,6 +7,6 @@ repositories:
 releases:
   - name: postgresql
     chart: bitnami/postgresql
-    version: 10.14.0
+    version: 10.15.0
     values:
       - ./config/postgresql-values.yaml.gotmpl
