@@ -69,6 +69,22 @@ data:
     macaroon_secret_key: "{{ .Values.macaroonSecretKey }}"
     form_secret: "{{ .Values.formSecret}}"
 
+{{ if .Values.sso.enabled }}
+    oidc_providers:
+      - idp_id: google
+        idp_name: Google
+        idp_brand: "google"
+        issuer: "https://accounts.google.com/"
+        client_id: "{{ .Values.sso.client_id }}"
+        client_secret: "{{ .Values.sso.client_secret }}"
+        allow_existing_users: true
+        scopes: ["openid", "profile"]
+        user_mapping_provider:
+          config:
+            localpart_template: "{{ user.given_name|lower }}"
+            display_name_template: "{{ user.given_name }} | W3F"
+{{ end }}
+
 {{ if .Values.email.enabled }}
     email:
       enable_notifs: false
