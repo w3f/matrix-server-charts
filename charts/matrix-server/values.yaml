@@ -40,7 +40,7 @@ sso:
   client_secret: CLIENT_SECRET
 
 email:
-  enabled: false
+  enabled: true
   smtp_host: "localhost"
   smtp_port: 25
   smtp_user: "user"
