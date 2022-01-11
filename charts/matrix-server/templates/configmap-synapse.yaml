@@ -81,8 +81,8 @@ data:
         scopes: ["openid", "profile"]
         user_mapping_provider:
           config:
-            localpart_template: "{{ user.given_name|lower }}"
-            display_name_template: "{{ user.given_name }} | W3F"
+            localpart_template: "{{`{{ user.given_name|lower }}`}}"
+            display_name_template: "{{`{{ user.given_name }}`}} | W3F"
 {{ end }}
 
 {{ if .Values.email.enabled }}
