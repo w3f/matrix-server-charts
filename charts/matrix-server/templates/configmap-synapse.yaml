@@ -81,7 +81,7 @@ data:
         scopes: ["openid", "profile"]
         user_mapping_provider:
           config:
-            localpart_template: "{{`{{ user.email.split("@")[0]|lower }}`}}"
+            localpart_template: "{{`{{ user.email.split('@')[0] }}`}}"
             display_name_template: "{{`{{ user.given_name }}`}} | W3F"
 {{ end }}
 
