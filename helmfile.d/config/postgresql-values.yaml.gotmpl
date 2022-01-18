@@ -1,16 +1,5 @@
-image:
-  registry: docker.io
-  repository: bitnami/postgresql
-  tag: 11.13.0-debian-10-r62
-  pullPolicy: IfNotPresent
-  debug: false
 volumePermissions:
   enabled: true
-  image:
-    registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r221
-    pullPolicy: Always
   securityContext:
     runAsUser: 0
 securityContext:
@@ -120,17 +109,6 @@ metrics:
       prometheus.io/scrape: "true"
       prometheus.io/port: "9187"
     loadBalancerIP:
-  image:
-    registry: docker.io
-    repository: bitnami/postgres-exporter
-    tag: 0.10.0-debian-10-r102
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ##
-    # pullSecrets:
-    #   - myRegistryKeySecretName
   ## Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
