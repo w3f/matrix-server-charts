@@ -78,7 +78,7 @@ data:
         client_id: "{{ .Values.sso.client_id }}"
         client_secret: "{{ .Values.sso.client_secret }}"
         allow_existing_users: true
-        scopes: ["openid", "profile"]
+        scopes: ["openid", "profile", "email"]
         user_mapping_provider:
           config:
             localpart_template: "{{`{{ user.email.split('@')[0] }}`}}"
