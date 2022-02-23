@@ -1,5 +1,5 @@
 description: Web3 Foundation Matrix Homeserver
 name: matrix-server
-version: v1.8.0
-appVersion: v1.52.0
+version: v1.8.1
+appVersion: v1.53.0
 apiVersion: v2
