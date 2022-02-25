@@ -3,6 +3,7 @@ environment: production
 port: 8008
 
 domain: domain.com
+proxied: false
 
 image:
   repo: matrixdotorg/synapse

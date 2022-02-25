@@ -2,6 +2,7 @@ environment: production
 
 domain: w3f.tech
 matrixDomain: web3.foundation
+proxied: false
 
 brand: "Web3 Foundation"
 
