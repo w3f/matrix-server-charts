@@ -5,7 +5,11 @@ metadata:
   labels:
     app: {{ .Release.Name }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
+  # https://argo-cd.readthedocs.io/en/stable/user-guide/best_practices/#leaving-room-for-imperativeness
+  # do not include replicas in the manifests if you want replicas to be controlled by HPA
   replicas: {{ .Values.replicaCount }}
+  {{ end }}
   revisionHistoryLimit: 3
   strategy:
     type: RollingUpdate

@@ -10,6 +10,7 @@ port: 8080
 
 image:
   repo: vectorim/element-web
+  #tag: latest
 
 replicaCount: 3  
 

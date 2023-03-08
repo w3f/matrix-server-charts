@@ -7,6 +7,7 @@ proxied: false
 
 image:
   repo: matrixdotorg/synapse
+  #tag: latest
 
 antiscam_image:
   repo: web3f/matrix-antiscam
