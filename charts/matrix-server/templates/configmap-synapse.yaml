@@ -4,6 +4,19 @@ metadata:
   name: {{ .Release.Name }}-synapse
 data:
   homeserver.yaml: |
+
+    #to fix matrixbots restart issues: https://github.com/matrix-org/synapse/blob/develop/docs/usage/configuration/config_documentation.md#rc_login
+    rc_login:
+     address:
+      per_second: 1
+      burst_count: 20
+     account:
+      per_second: 1
+      burst_count: 20
+     failed_attempts:
+      per_second: 1
+      burst_count: 20
+    
     server_name: "{{ .Values.domain }}"
 
     pid_file: /homeserver.pid
