@@ -3,9 +3,8 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-synapse
 data:
+  #About rc_login: to fix matrixbots restart issues: https://github.com/matrix-org/synapse/blob/develop/docs/usage/configuration/config_documentation.md#rc_login
   homeserver.yaml: |
-
-    #to fix matrixbots restart issues: https://github.com/matrix-org/synapse/blob/develop/docs/usage/configuration/config_documentation.md#rc_login
     rc_login:
      address:
       per_second: 1
