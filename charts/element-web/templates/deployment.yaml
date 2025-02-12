@@ -27,6 +27,9 @@ spec:
       - name: {{ .Release.Name }}
         image: {{ .Values.image.repo }}:{{ .Values.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: IfNotPresent
+        env: 
+        - name: ELEMENT_WEB_PORT
+          value: "80"
         ports:
         - name: http
           containerPort: 80
