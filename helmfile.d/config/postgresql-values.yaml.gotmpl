@@ -18,6 +18,11 @@ replication:
   applicationName: my_application
 {{ end }}
 
+auth:
+  username: '{{ env "DB_USER" | default "synapse_user" }}'
+  password: '{{ env "DB_PASSWORD" | default "pass" }}'
+  database: '{{ env "DB_NAME" | default "synapse" }}'
+
 ## PostgreSQL admin user
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
 postgresqlUsername: '{{ env "DB_USER" | default "synapse_user" }}'
