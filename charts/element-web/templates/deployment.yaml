@@ -29,14 +29,14 @@ spec:
         imagePullPolicy: IfNotPresent
         env: 
         - name: ELEMENT_WEB_PORT
-          value: {{ .Values.port }}
+          value: "{{ .Values.port }}"
         ports:
         - name: http
-          containerPort: 8080
+          containerPort: {{ .Values.port }}
         readinessProbe:
           httpGet:
             path: /
-            port: 8080
+            port: {{ .Values.port }}
           initialDelaySeconds: 30
           timeoutSeconds: 30
         {{ if ne .Values.environment "ci" }}  
