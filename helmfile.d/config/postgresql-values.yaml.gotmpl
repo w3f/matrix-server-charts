@@ -20,14 +20,6 @@ auth:
   {{ if ne .Environment.Name "ci" }}
   replicationUsername: repl_user
   replicationPassword: "repl_password"
-  replication:
-    enabled: true
-    user: repl_user
-    password: repl_password
-    readReplicas: 2
-    synchronousCommit: "on"
-    numSynchronousReplicas: 1
-    applicationName: my_application
   {{ end }}
 
 primary: 
