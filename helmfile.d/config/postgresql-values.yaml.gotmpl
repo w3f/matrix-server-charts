@@ -3,7 +3,7 @@ volumePermissions:
   containerSecurityContext:
     runAsUser: 0
 serviceAccount:
-  enabled: true
+  create: true
 {{ if ne .Environment.Name "ci" }}
 replication:
   enabled: true
