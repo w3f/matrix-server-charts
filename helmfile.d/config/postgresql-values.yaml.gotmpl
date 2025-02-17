@@ -2,9 +2,6 @@ volumePermissions:
   enabled: true
   containerSecurityContext:
     runAsUser: 0
-securityContext:
-  enabled: true
-  runAsUser: 1001
 serviceAccount:
   enabled: true
 {{ if ne .Environment.Name "ci" }}
@@ -26,6 +23,9 @@ auth:
 primary: 
   initdb:
     args: --lc-collate C --lc-ctype C --encoding UTF8
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
 
 ## PostgreSQL admin user
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
