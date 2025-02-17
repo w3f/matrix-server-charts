@@ -6,19 +6,29 @@ serviceAccount:
   create: true
 {{ if ne .Environment.Name "ci" }}
 replication:
-  enabled: true
-  user: repl_user
-  password: repl_password
-  readReplicas: 2
   synchronousCommit: "on"
   numSynchronousReplicas: 1
   applicationName: my_application
+readReplicas:
+  replicaCount: 2
 {{ end }}
 
 auth:
   username: '{{ env "DB_USER" | default "synapse_user" }}'
   password: '{{ env "DB_PASSWORD" | default "pass" }}'
   database: '{{ env "DB_NAME" | default "synapse" }}'
+  {{ if ne .Environment.Name "ci" }}
+  replicationUsername: repl_user
+  replicationPassword: "repl_password"
+  replication:
+    enabled: true
+    user: repl_user
+    password: repl_password
+    readReplicas: 2
+    synchronousCommit: "on"
+    numSynchronousReplicas: 1
+    applicationName: my_application
+  {{ end }}
 
 primary: 
   initdb:
