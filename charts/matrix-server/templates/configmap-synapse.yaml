@@ -54,6 +54,7 @@ data:
     signing_key_path: "/etc/matrix-server/{{ .Values.domain }}.signing.key"
 
     media_store_path: "/data/media_store"
+{{- if not .Values.mas.enabled }}
 
     enable_registration_captcha: true
     recaptcha_public_key: "{{ .Values.recaptcha.publicKey }}"
@@ -69,9 +70,12 @@ data:
       pattern: '{{ .Values.emailPattern }}'
     - medium: msisdn
       pattern: '.*'
+{{- end }}
 
     enable_metrics: true
-    registration_shared_secret: "{{ .Values.registrationSharedSecret }}"
+{{- if not .Values.mas.enabled }}
+    registration_shared_secret: "{{ required "registrationSharedSecret must be set" .Values.registrationSharedSecret }}"
+{{- end }}
 
     auto_join_rooms:
 {{ toYaml .Values.autojoinRooms | indent 4 }}
@@ -81,7 +85,7 @@ data:
     macaroon_secret_key: "{{ .Values.macaroonSecretKey }}"
     form_secret: "{{ .Values.formSecret}}"
 
-{{ if .Values.sso.enabled }}
+{{ if and .Values.sso.enabled (not .Values.mas.enabled) }}
     oidc_providers:
       - idp_id: google
         idp_name: Google
@@ -107,3 +111,13 @@ data:
       notif_from: {{ .Values.email.notif_from | quote }}
       client_base_url: {{ .Values.email.client_base_url | quote }}
 {{ end }}
+{{- if .Values.mas.enabled }}
+
+    matrix_authentication_service:
+      enabled: true
+      endpoint: {{ .Values.mas.endpoint | quote }}
+      secret: {{ .Values.mas.secret | quote }}
+    enable_registration: false
+    password_config:
+      enabled: false
+{{- end }}

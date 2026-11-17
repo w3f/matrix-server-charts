@@ -1,0 +1,70 @@
+image:
+  repo: ghcr.io/element-hq/matrix-authentication-service
+
+replicas: 0
+
+domain: domain.com
+host: auth.domain.com
+matrixHost: matrix.domain.com
+matrixTlsSecret: matrix-server-tls
+proxied: false
+
+synapseEndpoint: http://matrix-server:8008
+
+trustedProxies:
+  - 10.244.0.0/16
+  - 10.135.0.0/16
+  - 127.0.0.1/8
+  - ::1/128
+
+db:
+  host: postgresql-17
+  port: 5432
+  name: mas
+  user: mas
+  password: password
+
+secrets:
+  encryption: "0000000000000000000000000000000000000000000000000000000000000000"
+  synapseShared: shared_secret
+  keys:
+    rsa: ""
+    p256: ""
+    p384: ""
+    k256: ""
+
+passwordRegistration: true
+
+captcha:
+  enabled: true
+  siteKey: recaptcha_public
+  secretKey: recaptcha_private
+
+email:
+  enabled: true
+  from: '"Matrix Server" <matrix@domain.com>'
+  host: smtp.gmail.com
+  port: 587
+  user: user
+  pass: password
+
+google:
+  enabled: true
+  providerId: 01AAAAAAAAAAAAAAAAAAAAAAAA
+  synapseIdpId: oidc-google
+  clientId: CLIENT_ID
+  clientSecret: CLIENT_SECRET
+  displayNameTemplate: "{{ user.given_name }}"
+
+compatRoutes: false
+
+syn2mas:
+  mode: "off"
+  synapseConfigSecret: syn2mas-synapse-config
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    memory: 512Mi

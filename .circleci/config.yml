@@ -24,6 +24,9 @@ jobs:
       - run:
           command: |
             helm lint ./charts/element-web
+      - run:
+          command: |
+            helm lint ./charts/matrix-auth-service
 
   publishChart:
     docker:

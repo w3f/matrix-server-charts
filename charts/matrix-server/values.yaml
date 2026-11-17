@@ -34,7 +34,12 @@ emailPattern: |-
 autojoinRooms:
 - "#arrivals:domain.com"
 
-registrationSharedSecret: foobar
+registrationSharedSecret: ""
+
+mas:
+  enabled: false
+  endpoint: http://matrix-auth-service:8080/
+  secret: shared_secret
 
 sso:
   enabled: false

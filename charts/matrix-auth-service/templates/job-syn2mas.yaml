@@ -1,0 +1,62 @@
+{{- $mode := .Values.syn2mas.mode | toString }}
+{{- if ne $mode "off" }}
+{{- if not (has $mode (list "check" "dry-run" "migrate")) }}
+{{- fail (printf "syn2mas.mode must be off|check|dry-run|migrate, got %q" $mode) }}
+{{- end }}
+{{- if and (eq $mode "migrate") (gt (int .Values.replicas) 0) }}
+{{- fail "syn2mas.mode=migrate requires replicas: 0 (MAS must not run during the migration)" }}
+{{- end }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-syn2mas-{{ $mode }}
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 604800
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-syn2mas
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+      containers:
+      - name: syn2mas
+        image: {{ .Values.image.repo }}:{{ .Values.image.tag | default .Chart.AppVersion }}
+        args:
+        - syn2mas
+        {{- if eq $mode "check" }}
+        - check
+        {{- else }}
+        - migrate
+        {{- end }}
+        - --config
+        - /config/config.yaml
+        - --synapse-config
+        - /synapse/homeserver.yaml
+        {{- if eq $mode "dry-run" }}
+        - --dry-run
+        {{- end }}
+        volumeMounts:
+        - name: config
+          mountPath: /config
+          readOnly: true
+        - name: synapse-config
+          mountPath: /synapse
+          readOnly: true
+      volumes:
+      - name: config
+        secret:
+          secretName: {{ .Release.Name }}-config
+          defaultMode: 0444
+      - name: synapse-config
+        secret:
+          secretName: {{ .Values.syn2mas.synapseConfigSecret }}
+          defaultMode: 0444
+{{- end }}
