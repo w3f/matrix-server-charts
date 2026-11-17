@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 
 jobs:
   integrationTests:
@@ -10,7 +10,7 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          description: run integration tests
+          name: run integration tests
           command: |
             /scripts/integration-tests.sh kindest/node:v1.21.1
   helmLint:
@@ -38,7 +38,6 @@ jobs:
             /scripts/publish-chart.sh
 
 workflows:
-  version: 2
   test_and_deploy:
     jobs:
       - helmLint:
