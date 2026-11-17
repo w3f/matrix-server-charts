@@ -1,0 +1,56 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: letsencrypt
+  {{- if .Values.proxied }}
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+  {{- end }}
+spec:
+  tls:
+  - hosts:
+      - {{ .Values.host }}
+    secretName: {{ .Release.Name }}-tls
+  rules:
+  - host: {{ .Values.host }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Release.Name }}
+            port:
+              number: 8080
+{{- if .Values.compatRoutes }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-compat
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+  - hosts:
+      - {{ .Values.matrixHost }}
+    secretName: {{ .Values.matrixTlsSecret }}
+  rules:
+  - host: {{ .Values.matrixHost }}
+    http:
+      paths:
+      {{- range list "login" "logout" "refresh" }}
+      {{- $ep := . }}
+      {{- range list "v3" "r0" }}
+      - path: /_matrix/client/{{ . }}/{{ $ep }}
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ $.Release.Name }}
+            port:
+              number: 8080
+      {{- end }}
+      {{- end }}
+{{- end }}
